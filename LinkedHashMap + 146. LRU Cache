@@ -1,0 +1,151 @@
+LinkedHashMap 概述
+HashMap 是无序的，HashMap 在 put 的时候是根据 key 的 hashcode 进行 hash 然后放入对应的地方。所以在按照一定顺序 put 进 HashMap 中，然后遍历出 HashMap 的顺序跟 put 的顺序不同（除非在 put 的时候 key 已经按照 hashcode 排序号了，这种几率非常小).
+LinkedHashMap 是 HashMap 的一个子类，它保留插入的顺序，如果需要输出的顺序和输入时的相同，那么就选用 LinkedHashMap。
+LinkedHashMap 是 Map 接口的哈希表和链接列表实现，具有可预知的迭代顺序。此实现提供所有可选的映射操作，并允许使用 null 值和 null 键。此类不保证映射的顺序，特别是它不保证该顺序恒久不变。
+
+LinkedHashMap 实现与 HashMap 的不同之处在于，LinkedHashMap 维护着一个运行于所有条目的双重链接列表。此链接列表定义了迭代顺序，该迭代顺序可以是插入顺序或者是访问顺序。
+
+注意，此实现不是同步的。如果多个线程同时访问链接的哈希映射，而其中至少一个线程从结构上修改了该映射，则它必须保持外部同步。
+
+根据链表中元素的顺序可以分为：按插入顺序的链表，和按访问顺序(调用 get 方法)的链表。默认是按插入顺序排序，如果指定按访问顺序排序，那么调用get方法后，会将这次访问的元素移至链表尾部，不断访问可以形成按访问顺序排序的链表。
+
+我们可以看到，其输出顺序是完成按照插入顺序的！也就是我们上面所说的保留了插入的顺序。我们不是在上面还提到过其可以按照访问顺序进行排序么？好的，我们还是通过一个例子来验证一下：
+
+public static void main(String[] args) {
+    Map<String, String> map = new LinkedHashMap<String, String>(16,0.75f,true);
+    map.put("apple", "苹果");
+    map.put("watermelon", "西瓜");
+    map.put("banana", "香蕉");
+    map.put("peach", "桃子");
+
+    map.get("banana");
+    map.get("apple");
+
+    Iterator iter = map.entrySet().iterator();
+    while (iter.hasNext()) {
+        Map.Entry entry = (Map.Entry) iter.next();
+        System.out.println(entry.getKey() + "=" + entry.getValue());
+    }
+}
+代码与之前的都差不多，但我们多了两行代码，并且初始化 LinkedHashMap 的时候，用的构造函数也不相同，看一下控制台的输出结果：
+
+watermelon=西瓜
+peach=桃子
+banana=香蕉
+apple=苹果
+
+这也就是我们之前提到过的，LinkedHashMap 可以选择按照访问顺序进行排序。
+
+查看源码： https://wiki.jikexueyuan.com/project/java-collection/linkedhashmap.html
+
+应用举例： LeetCode #146 LRU Cache
+
+Method one: LinkedHashMap without access mode = true  这里面应用的是LinkedHashMap的一些方法
+
+class LRUCache { //这个答案整个是需要设计一个class的
+    
+    int capacity; 
+    LinkedHashMap <Integer, Integer> map = new LinkedHashMap <Integer, Integer>(capacity);
+    
+    public LRUCache(int capacity) { //constructor
+        this.capacity = capacity;
+    }
+    
+    public int get(int key) {
+        
+       if (map.containsKey(key)){
+           int value = map.get(key); //存储value
+           map.remove(key); // 删除原来位置
+           map.put(key, value); //放到最后位置
+           return value;
+       }
+       return -1;     
+    }
+    
+    
+    public void put(int key, int value) {
+        
+        if (map.containsKey(key)){
+            map.remove(key); //中间的删除
+            map.put(key, value); //放到最后
+        } 
+        map.put(key, value); //放到最后
+        System.out.println ("key you are putting in is: "+key);
+        if (map.size()> capacity){
+            int keytest = map.keySet().iterator().next(); //这个返回的是map keySet里面的第一个element
+                System.out.print("test: "+keytest);
+                map.remove(keytest);
+        //(1,1) (2,2) --> (2,2) (1,1) --> (2,2) (1,1) (3,3) --> (1,1) (3,3) (2,2) --> (1,1) (3,3) (2,2) (4,4) 需要remove (1,1) 
+        // --> get(1) return null --> (2,2) (4,4) (3,3) --> (2,2) (3,3) (4,4)
+        }
+        }
+    }
+
+
+Method two: LinkedHashMap with access mode on 这里面应用的是LinkedHashMap的constructor
+LinkedHashMap 有5种constructor，其中第4种提供了插入模式
+
+1. public LinkedHashMap()
+Constructs an empty insertion-ordered LinkedHashMap instance with the default initial capacity (16) and load factor (0.75).
+
+2. public LinkedHashMap(int initialCapacity)
+Constructs an empty insertion-ordered LinkedHashMap instance with the specified initial capacity and a default load factor (0.75).
+
+3. public LinkedHashMap(int initialCapacity, float loadFactor)
+Constructs an empty insertion-ordered LinkedHashMap instance with the specified initial capacity and load factor.
+Parameters:
+        initialCapacity - the initial capacity
+        loadFactor - the load factor
+Throws:
+        IllegalArgumentException - if the initial capacity is negative or the load factor is nonpositive
+        
+4. public LinkedHashMap(int initialCapacity, float loadFactor, boolean accessOrder)
+Constructs an empty LinkedHashMap instance with the specified initial capacity, load factor and ordering mode.
+Parameters:
+        initialCapacity - the initial capacity
+        loadFactor - the load factor
+        accessOrder - the ordering mode - true for access-order, false for insertion-order
+Throws:
+        IllegalArgumentException - if the initial capacity is negative or the load factor is nonpositive
+
+5. public LinkedHashMap(Map<? extends K,? extends V> m)
+Constructs an insertion-ordered LinkedHashMap instance with the same mappings as the specified map. The LinkedHashMap instance is created with a default load factor (0.75) and an initial capacity sufficient to hold the mappings in the specified map.
+
+Parameters:
+        m - the map whose mappings are to be placed in this map
+Throws:
+        NullPointerException - if the specified map is null
+
+那么LRU这道题还可以更简单的写成： 
+class LRUCache { //这个答案整个是需要设计一个class的
+
+    
+    int capacity; 
+    LinkedHashMap <Integer, Integer> map = new LinkedHashMap <Integer, Integer>(capacity, 0.75f, true); //注意0.75f这个写法，否则报错
+    
+    public LRUCache(int capacity) { //constructor
+        this.capacity = capacity;
+    }
+    
+    public int get(int key) {
+       return map.getOrDefault(key,-1); 
+    }
+    
+    
+    public void put(int key, int value) {
+        
+        map.put(key, value); //自动放到最后
+        
+        if (map.size()> capacity){
+            int keytest = map.keySet().iterator().next(); //这个返回的是map keySet里面的第一个element
+            map.remove(keytest);
+        //(1,1) (2,2) --> (2,2) (1,1) --> (2,2) (1,1) (3,3) --> (1,1) (3,3) (2,2) --> (1,1) (3,3) (2,2) (4,4) 需要remove (1,1) 
+        // --> get(1) return null --> (2,2) (4,4) (3,3) --> (2,2) (3,3) (4,4)
+        }
+        }
+    }
+
+
+
+
+
