@@ -41,7 +41,7 @@ apple=苹果
 应用举例： LeetCode #146 LRU Cache
 
 第一种方法： LinkedHashMap without access mode = true  这里面应用的是LinkedHashMap的一些方法
-
+```
 class LRUCache { //这个答案整个是需要设计一个class的
     
     int capacity; 
@@ -81,9 +81,10 @@ class LRUCache { //这个答案整个是需要设计一个class的
         }
     }
 
+```
 
 第二种方法： LinkedHashMap with access mode on 这里面应用的是LinkedHashMap的constructor
-LinkedHashMap 有5种constructor，其中第4种提供了插入模式
+LinkedHashMap 有5种constructor，其中第4种提供了插入模式access mode
 
 1. public LinkedHashMap()
 Constructs an empty insertion-ordered LinkedHashMap instance with the default initial capacity (16) and load factor (0.75).
@@ -117,6 +118,7 @@ Throws:
         NullPointerException - if the specified map is null
 
 那么LRU这道题还可以更简单的写成： 
+```
 class LRUCache { //这个答案整个是需要设计一个class的
 
     
@@ -144,10 +146,11 @@ class LRUCache { //这个答案整个是需要设计一个class的
         }
         }
     }
+```
 
-如何去实现这个LinkedHashMap? 还是用LRU来举例，Java有两种时间方法：DoubleLikedList 和 Signle LinkedList
+如何去实现这个LinkedHashMap? 还是用LRU来举例，Java有两种时间方法：DoubleLikedList 和 SignleLinkedList
 
-第三种方法：HashMap + Doubly Linked List
+第三种方法：HashMap + DoubleLinkedList
 这道题的思想是，用HashMap来实现get, put这些方法，同时，又要保持这些插入的node的顺序，那么它的思路就是，把这些Node放在HashMap里 <key, DoubleNode (key, value, prev, next)>；这样的数据结构可以保证这些DoubleNode以一种linkedList方式排好顺序。
 
 根据上面两种方法的思想： 
