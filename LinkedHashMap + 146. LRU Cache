@@ -40,7 +40,7 @@ apple=苹果
 
 应用举例： LeetCode #146 LRU Cache
 
-Method one: LinkedHashMap without access mode = true  这里面应用的是LinkedHashMap的一些方法
+第一种方法： LinkedHashMap without access mode = true  这里面应用的是LinkedHashMap的一些方法
 
 class LRUCache { //这个答案整个是需要设计一个class的
     
@@ -82,7 +82,7 @@ class LRUCache { //这个答案整个是需要设计一个class的
     }
 
 
-Method two: LinkedHashMap with access mode on 这里面应用的是LinkedHashMap的constructor
+第二种方法： LinkedHashMap with access mode on 这里面应用的是LinkedHashMap的constructor
 LinkedHashMap 有5种constructor，其中第4种提供了插入模式
 
 1. public LinkedHashMap()
@@ -145,6 +145,108 @@ class LRUCache { //这个答案整个是需要设计一个class的
         }
     }
 
+如何去实现这个LinkedHashMap? 还是用LRU来举例，Java有两种时间方法：DoubleLikedList 和 Signle LinkedList
+
+第三种方法：HashMap + Doubly Linked List
+这道题的思想是，用HashMap来实现get, put这些方法，同时，又要保持这些插入的node的顺序，那么它的思路就是，把这些Node放在HashMap里 <key, DoubleNode (key, value, prev, next)>；这样的数据结构可以保证这些DoubleNode以一种linkedList方式排好顺序。
+
+根据上面两种方法的思想： 
+-	constructor需要建立一个head – tail 两个null的空链表；
+-	get方法是return value + 把这个node原位置删除，然后挪到linkedlist最后位置，那么这里要自己写的方法是：1.remove一个node； 2. move to last position in linked list
+-	put方法是: 1.更新一个node的value, 2. move to last position in linked list； 或者3.直接在最后position加入这个新node
+-	当capacity超过了，那么需要remove first node，这个也可以用remove一个node来实现，但因为我们还要在map里面删除第一个node的entry，所以我们需要得到第一个node的key，所以我们需要方法来pop first node key, 同时删除。
+这样总结下来，需要单独写的方法有：1.remove一个node；2. move to last position in linked list 3.直接在最后position加入这个新node； 4. pop first node
+
+```
+class LRUCache { //这个答案整个是需要设计一个class的
+    
+    //问题：怎么写这些doouble linked list？
+    //先处理LinkedList部分
+    class DoubleNode {
+        DoubleNode prev;
+        DoubleNode next;
+        int key; 
+        int value; 
+    }
+    
+    //doubleLinkedList需要操作next就可以实现删除
+    public void addLast(DoubleNode node) {
+        // tail.prev --> node -->tail
+        tail.prev.next = node;
+        node.next = tail;
+        // tail.prev <-- node <--tail
+        node.prev = tail.prev;
+        tail.prev = node;
+    }
+     
+    public void removeNode(DoubleNode node){
+        // node.prev <-|- node -|-> node.next
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+    
+    public int popFirst(){
+        // head <-|- node -|-> node.next
+        DoubleNode node = head.next;
+        removeNode(node);
+        return node.key;
+    }
+    
+    public void movetoLast(DoubleNode node){
+        removeNode(node);
+        addLast(node);
+    }
+    
+    //这个DoubleLinkedList和HashMap应该怎么实现？ 
+    //HashMap用来实现近似O(1)查找，Node里面是查找到的对象
+    //<key, Double(key, value, prev, next)>
+    //class里的全局变量
+    HashMap <Integer, DoubleNode> map = new HashMap <Integer, DoubleNode>();
+    int capacity;
+    int size;
+    DoubleNode head, tail; //
+    
+    //这个constructor里面新建一个空白linked list:  head(null) <--> tail (null),没有关于map的操作
+    public LRUCache(int capacity) { 
+        this.capacity = capacity;
+        this.size = 0; //注意要记得这个来track size
+        
+        head = new DoubleNode();//这是写null node的方法，不需要传进去(null)
+        tail = new DoubleNode();//这是写null node的方法，不需要传进去(null)
+        
+        head.next = tail;
+        tail.prev = head;
+    }
+    
+    public int get(int key) {
+       if (!map.containsKey(key)) {
+           return -1;
+       }
+       movetoLast(map.get(key)); //move to last position in the linked list
+       return map.get(key).value;
+    }
+    
+    
+    public void put(int key, int value) {
+        
+       if (map.containsKey(key)){
+           map.get(key).value = value;
+           movetoLast(map.get(key));
+       } else {
+           map.put(key, new DoubleNode());
+           map.get(key).key = key;
+           map.get(key).value = value;
+           addLast(map.get(key));
+           size++;// 这里容易忘记
+       }
+        
+        while (map.size()> capacity){
+            int first = popFirst();
+            map.remove(first);
+        }
+        }
+    }
+```
 
 
 
