@@ -4,6 +4,17 @@
 
 ## 各种常用方法总结：
 
+### StringBuilder: 
+
+- String转化Integer:  Integer.valueOf(String s)
+                      Integer.parseInt(String s)
+- Integer转化String:  Integer.toString(int i)
+
+
+
+- String转化Integer:  Integer.valueOf(String s)
+- String转化Long:   Long.valueOf(String s)
+
 
 
 ## 题型一：插入型问题
