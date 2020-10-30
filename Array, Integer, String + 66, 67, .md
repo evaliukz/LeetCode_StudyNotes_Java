@@ -4,17 +4,28 @@
 
 ## 各种常用方法总结：
 
-### StringBuilder: 
+### 十进制转化为其他进制：
+
+1 二进制：Integer.toHexString(int i);
+2 八进制：Integer.toOctalString(int i);
+3 十六进制：Integer.toBinaryString(int i);
+2,其他进制转化为十进制：
+
+1 二进制：Integer.valueOf("0101",2).toString;
+2 八进制：Integer.valueOf("376",8).toString;
+3 十六进制：Integer.valueOf("FFFF",16).toString;
+3,使用Integer类中的parseInt()方法和valueOf()方法都可以将其他进制转化为10进制。不同的是parseInt()方法的返回值是int类型，而valueOf()返回值是Integer对象。
+
+
+### 关于String和Integer的转化：
 
 - String转化Integer:  Integer.valueOf(String s)
                       Integer.parseInt(String s)
+                      不同的是parseInt()方法的返回值是int类型，而valueOf()返回值是Integer对象。
+                      
 - Integer转化String:  Integer.toString(int i)
 
-
-
-- String转化Integer:  Integer.valueOf(String s)
 - String转化Long:   Long.valueOf(String s)
-
 
 
 ## 题型一：插入型问题
