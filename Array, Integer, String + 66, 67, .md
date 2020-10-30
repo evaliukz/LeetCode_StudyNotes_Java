@@ -6,9 +6,9 @@
 
 ### 十进制转化为其他进制：
 
-* 二进制：Integer.toHexString(int i);
+* 二进制：Integer.toBinaryString(int i);
 * 八进制：Integer.toOctalString(int i);
-* 十六进制：Integer.toBinaryString(int i);
+* 十六进制：Integer.toHexString(int i);
 
 ### 其他进制转化为十进制：
 * 二进制：Integer.valueOf("0101",2).toString;
@@ -32,7 +32,67 @@
 
 ### 1. Integers：  Usually the addition operation is not allowed for such a case. Use Bit Manipulation Approach. Here is an example: Add Binary.
 
-### 2. Strings： Use bit by bit computation. Note, sometimes it might not be feasible to come up a solution with the constant space for languages with immutable strings, e.g. for Java and Python. Here is an example: Add Binary.
+### 2. Strings： Use bit by bit computation. Note, sometimes it might not be feasible to come up a solution with the constant space for languages with immutable strings。
+
+#### 例题：67. Add Binary
+第一种方法，Not Accepted: 想法是可以把string转化成integer, 但有overflow
+如果字符串超过 3333 位，不能转化为 Integer
+如果字符串超过 6565 位，不能转化为 Long
+如果字符串超过 500000001500000001 位，不能转化为 BigInteger
+
+```
+class Solution {
+    public String addBinary(String a, String b) {
+        
+        //自己的想法：可以把string转化成integer, 但有overflow，这时候要问限制条件
+        int aNumber = Integer.valueOf(a,2);
+        int bNumber = Integer.valueOf(b,2);
+        
+        return Integer.toBinaryString(aNumber + bNumber);
+    }
+}
+```
+第二种解法：
+```
+class Solution {
+    public String addBinary(String a, String b) {
+        
+        StringBuilder result = new StringBuilder ("");
+        int extraBit = 0; //是否进一位 
+        
+        
+        for (int i = a.length()-1, j = b.length()-1; i>=0 || j>=0; i--, j--){
+            int sum = extraBit;
+            // 获取字符串a对应的某一位的值a.charAt(i) 即0或1 
+                if (i>=0) { //当i>=0时，取原值 ‘1’的char类型和‘0’的char类型刚好相差为1
+                    sum += a.charAt(i) - '0'; 
+                } else { //当i<0是 sum+=0（向前补0）
+                    sum += 0;
+                }
+            
+            // 获取字符串b对应的某一位的值b.charAt(i) 即0或1 
+                if (i>=0) { //当i>=0时，取原值 ‘1’的char类型和‘0’的char类型刚好相差为1
+                    sum += b.charAt(i) - '0'; 
+                } else { //当i<0是 sum+=0（向前补0）
+                    sum += 0;
+                }
+        //上面两段代码可以写成：
+        //sum += (i >= 0 ? a.charAt(i) - '0' : 0);
+        //sum += ( j >= 0 ? b.charAt(j) - '0' : 0);    
+               
+                result.append(sum % 2); //如果二者都为1  那么sum%2应该刚好为0 否则为1
+                extraBit = sum / 2;   //如果二者都为1  那么ca 应该刚好为1 否则为0
+        }
+        
+        // 判断最后一次计算是否有进位  有则在最前面加上1 否则原样输出
+        result.append(extraBit == 1 ? extraBit : ""); 
+        
+        return result.reverse().toString();
+    }
+} 
+```
+
+
 
 ### 3. Linked Lists： Sentinel Head + Schoolbook Addition with Carry. Here is an example: Plus One Linked List.
 
