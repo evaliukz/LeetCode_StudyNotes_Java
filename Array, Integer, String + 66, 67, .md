@@ -4,13 +4,17 @@
 
 ## 各种常用方法总结：
 
-### 十进制转化为其他进制：
+### String
+- StringBuilder的reverse()方法结合逆序遍历是处理字符串问题的利器：
+
+### Integer
+- 十进制转化为其他进制：
 
 * 二进制：Integer.toBinaryString(int i);
 * 八进制：Integer.toOctalString(int i);
 * 十六进制：Integer.toHexString(int i);
 
-### 其他进制转化为十进制：
+- 其他进制转化为十进制：
 * 二进制：Integer.valueOf("0101",2).toString;
 * 八进制：Integer.valueOf("376",8).toString;
 * 十六进制：Integer.valueOf("FFFF",16).toString;
@@ -19,13 +23,16 @@
 
 ### 关于String和Integer的转化：
 
-- String转化Integer:   * Integer.valueOf(String s)
-                      * Integer.parseInt(String s)
-                      * 不同的是parseInt()方法的返回值是int类型，而valueOf()返回值是Integer对象。
+- String转化Integer:   
+* Integer.valueOf(String s)
+* Integer.parseInt(String s)
+* 不同的是parseInt()方法的返回值是int类型，而valueOf()返回值是Integer对象。
                       
-- Integer转化String:  Integer.toString(int i)
+- Integer转化String:  
+* Integer.toString(int i)
 
-- String转化Long:   Long.valueOf(String s)
+- String转化Long:   
+* Long.valueOf(String s)
 
 
 ## 题型一：插入型问题
