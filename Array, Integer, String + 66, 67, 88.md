@@ -2,7 +2,64 @@
 
 一般这种题是easy的题型。
 
-## 各种常用方法总结：
+## Array常用方法总结：
+
+#### Array和Collections相互转化方法：
+- Arrays.asList() 
+   List<String> stooges = Arrays.asList("Larry", "Moe", "Curly");
+- String[] y = x.toArray() 假设x是一个String的Collection list
+  
+#### array之间的copy操作：
+- int [] copyResult = Arrays.copyOfRange(int[] original, int from, int to);
+  把original从from到to这段copy到一个新的array叫做copyResult去
+  
+- System.arraycopy(Object src, int start, Object dest, int m, int length)
+  把src这个array，从start这个index开始整个array，copy到dest的从index m开始往前的 length 个位置。
+  
+  例题 88. Merge Sorted Array解法一
+```
+  class Solution {
+  public void merge(int[] nums1, int m, int[] nums2, int n) {
+    System.arraycopy(nums2, 0, nums1, m, n);
+    Arrays.sort(nums1);
+  }
+}
+不推荐 - 复杂度分析
+时间复杂度 : O((n + m)\log(n + m))O((n+m)log(n+m))。
+空间复杂度 : O(1)O(1)。
+```
+例题 88. Merge Sorted Array解法二， 要学习后面的那部分：如果加到最短数组的最后，后面的那些怎么挪到result里面去？
+```
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+     
+        int [] nums1copy = Arrays.copyOfRange(nums1, 0, m);
+        int p1 = 0, p2 = 0, index = 0;
+        
+        while (p1<m && p2<n) {
+            
+           if (nums1copy[p1] <= nums2[p2]) {
+               nums1[index] = nums1copy[p1]; 
+               p1++;
+           }  else {
+               nums1[index] = nums2[p2]; 
+               p2++;
+        }
+            index ++;
+    }
+       
+        //if (m>n) { 一开始写的用m和n判断，但是还是用p1和p2才能实现
+        if (p1<m) { 
+            System.arraycopy ( nums1copy, p1, nums1, p1+p2, m+n-p1-p2 ); //这里要用p1+p2 和 m+n-p1-p2！！！
+        }  
+        
+        if (p2<n) {
+            System.arraycopy ( nums2, p2, nums1, p1+p2, m+n-p1-p2); //这里要用p1+p2 和 m+n-p1-p2！！！
+        } 
+   }
+}
+```
+
 
 ### String
 - StringBuilder的reverse()方法结合逆序遍历是处理字符串问题的利器：
