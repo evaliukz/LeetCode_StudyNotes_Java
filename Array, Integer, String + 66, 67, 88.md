@@ -8,6 +8,9 @@
 - Arrays.asList() 
    List<String> stooges = Arrays.asList("Larry", "Moe", "Curly");
 - String[] y = x.toArray() 假设x是一个String的Collection list
+   
+- 把一些元素一次插入ArrayList l 的第一个位置 l.add(0,element);
+  例题 LC. 107 Binary Tree Level Order Traversal II 如果用BFS方法，最后输出是要这样插入的。如果直接把List<>result = LinkedList<>()；result是不能用addFirst的。
   
 #### array之间的copy操作：
 - int [] copyResult = Arrays.copyOfRange(int[] original, int from, int to);
