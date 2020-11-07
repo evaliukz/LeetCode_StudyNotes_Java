@@ -70,11 +70,11 @@ class Solution {
 - s.toLowerCase() 全变成小写
 - s.toUpperCase() 全变成大写
 
-- 字符替换 regex的用法：容易写错的地方有 replaceAll会写错成replace；里面的两个变量都是用“”而不是‘’；
-  *（1）replaceAll(String regex, String replacement) 例如s = s.replaceAll("[^a-zA-Z]","").toLowerCase()；这个是移除所有非大小写字母的char，并且变到lowercase.  
-  *（2）replaceFirst(String regex, String replacement)
-  *（3）s.replace(char oldChar, char newChar)
-  *（4）s.replace(CharSequence target, CharSequence replacement)
+#### 字符替换 regex的用法：容易写错的地方有 replaceAll会写错成replace；里面的两个变量都是用“”而不是‘’；
+- replaceAll(String regex, String replacement) 例如s = s.replaceAll("[^a-zA-Z]","").toLowerCase()；这个是移除所有非大小写字母的char，并且变到lowercase.  
+- replaceFirst(String regex, String replacement)
+- s.replace(char oldChar, char newChar)
+- s.replace(CharSequence target, CharSequence replacement)
 ```
 https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
 
@@ -97,7 +97,7 @@ https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
 \W	A non-word character: [^\w]
 ```
 
-
+#### StringBuilder
 - StringBuilder的reverse()方法结合逆序遍历是处理字符串问题的利器：
 
 
