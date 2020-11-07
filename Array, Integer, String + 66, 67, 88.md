@@ -65,7 +65,42 @@ class Solution {
 
 
 ### String
+
+#### string API字符处理
+- s.toLowerCase() 全变成小写
+- s.toUpperCase() 全变成大写
+
+- 字符替换 regex的用法：容易写错的地方有 replaceAll会写错成replace；里面的两个变量都是用“”而不是‘’；
+  （1）replaceAll(String regex, String replacement) 例如s = s.replaceAll("[^a-zA-Z]","").toLowerCase()；这个是移除所有非大小写字母的char，并且变到lowercase.  
+  （2）replaceFirst(String regex, String replacement)
+  （3）s.replace(char oldChar, char newChar)
+  （4）s.replace(CharSequence target, CharSequence replacement)
+
+- Character classes
+[abc]	a, b, or c (simple class)
+[^abc]	Any character except a, b, or c (negation)
+[a-zA-Z]	a through z or A through Z, inclusive (range)
+[a-d[m-p]]	a through d, or m through p: [a-dm-p] (union)
+[a-z&&[def]]	d, e, or f (intersection)
+[a-z&&[^bc]]	a through z, except for b and c: [ad-z] (subtraction)
+[a-z&&[^m-p]]	a through z, and not m through p: [a-lq-z](subtraction)
+ 
+- Predefined character classes
+.	Any character (may or may not match line terminators)
+\d	A digit: [0-9]
+\D	A non-digit: [^0-9]
+\s	A whitespace character: [ \t\n\x0B\f\r]
+\S	A non-whitespace character: [^\s]
+\w	A word character: [a-zA-Z_0-9]
+\W	A non-word character: [^\w]
+
+
+
 - StringBuilder的reverse()方法结合逆序遍历是处理字符串问题的利器：
+
+
+
+
 
 ### Integer
 - 十进制转化为其他进制：
