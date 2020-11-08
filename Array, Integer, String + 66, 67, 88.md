@@ -1,4 +1,4 @@
-# Array, Integer, String 的方法总结
+# Array, Integer, String, Character 的方法总结
 
 一般这种题是easy的题型。
 
@@ -64,14 +64,14 @@ class Solution {
 ```
 
 
-### String
+## char字符处理 String && Character 
 
 #### string API字符处理
 - s.toLowerCase() 全变成小写
 - s.toUpperCase() 全变成大写
 
 #### 字符替换 regex的用法：容易写错的地方有 replaceAll会写错成replace；里面的两个变量都是用“”而不是‘’；
-- replaceAll(String regex, String replacement) 例如s = s.replaceAll("[^a-zA-Z]","").toLowerCase()；这个是移除所有非大小写字母的char，并且变到lowercase.  
+- replaceAll(String regex, String replacement) 例如s = s.replaceAll("[^a-zA-Z0-9]","").toLowerCase()；这个是移除所有^只保留大小写字母的char和数字，并且变到lowercase.  
 - replaceFirst(String regex, String replacement)
 - s.replace(char oldChar, char newChar)
 - s.replace(CharSequence target, CharSequence replacement)
@@ -95,6 +95,72 @@ https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
 \S	A non-whitespace character: [^\s]
 \w	A word character: [a-zA-Z_0-9]
 \W	A non-word character: [^\w]
+```
+例题：125. Valid Palindrome 解法一用regex+two pointers
+```
+class Solution {
+    public boolean isPalindrome(String s) {
+        
+        // if (s.length() == 0) {
+        //     return true;
+        // }
+        
+        s = s.replaceAll("[^a-zA-Z0-9]","").toLowerCase();
+        
+        int start = 0, end = s.length()-1;
+        
+        while (start<end){
+            if (s.charAt(start)!=s.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+}
+```
+#### Character API字符处理
+下面的这些方法，在Character里面就是作为上面Regex的替代
+- Character.isDigit(char ch)
+- Character.isLetter(char ch)
+- Character.isLetterOrDigit(char ch)
+- Character.isLowerCase(char ch)
+- Character.isUpperCase(char ch)
+- Character.toLowerCase(char ch)
+- Character.toString(char ch)
+- Character.toUpperCase(char ch)
+
+例题：125. Valid Palindrome 解法二用Character API (比用regex速度更快)
+```
+class Solution {
+    public boolean isPalindrome(String s) {
+        
+        int start = 0, end = s.length()-1;
+        
+        while (start<end){
+            //每一次while保证只走一个所以用if, else if, else
+            if (!Character.isLetterOrDigit(s.charAt(start))){
+                start++;
+            }
+            
+            else if (!Character.isLetterOrDigit(s.charAt(end))){
+                end--;
+            } 
+            
+            else {
+                if (Character.toLowerCase(s.charAt(start))
+                    !=Character.toLowerCase(s.charAt(end))) {
+                    return false;
+                }
+                
+                start++;
+                end--;  
+            }
+        }
+        return true;
+    }
+}
 ```
 
 #### StringBuilder
