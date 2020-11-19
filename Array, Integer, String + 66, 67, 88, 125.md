@@ -66,6 +66,8 @@ class Solution {
 
 ## char字符处理 String && Character 
 
+String substring(int beginIndex, int endIndex): The substring begins at the specified beginIndex and extends to the character at index endIndex – 1.
+
 #### string API字符处理
 - s.toLowerCase() 全变成小写
 - s.toUpperCase() 全变成大写
