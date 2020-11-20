@@ -200,6 +200,17 @@ class Solution {
 * Long.valueOf(String s)
 
 
+```
+// 求组合数
+	public int combination(int n, int k) {
+		long result = 1;
+		for(int i = 1; i <= k; i++) {
+			result = result * (n - i + 1) / i;
+		}
+		return (int)result;
+	}
+```
+
 ## 题型一：插入型问题
 
 ### 1. Integers：  Usually the addition operation is not allowed for such a case. Use Bit Manipulation Approach. Here is an example: Add Binary.
