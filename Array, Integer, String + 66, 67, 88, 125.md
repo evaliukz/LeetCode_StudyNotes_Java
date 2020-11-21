@@ -1,4 +1,4 @@
-# Array, Integer, String, Character 的方法总结
+# Array, Character，Integer, String的方法总结
 
 一般这种题是easy的题型。
 
@@ -64,7 +64,9 @@ class Solution {
 ```
 
 
-## char字符处理 String && Character 
+## char字符处理 
+
+### String && Character 
 
 String substring(int beginIndex, int endIndex): The substring begins at the specified beginIndex and extends to the character at index endIndex – 1.
 
@@ -165,8 +167,52 @@ class Solution {
 }
 ```
 
+### Integer && Character 
+
+如何把char在字母表里增加？如何char和int之间转换？
+
+首先，一个char在字母表里的顺序可以通过这个得到：int oldPosition = oldChar - 'a'；
+然后，如果shift，增加的话，需要 int newPosition = (oldPosition + change)%26; 
+最后，得到的新的字母就是把char给cast到index前面： char newChat = (char)newPosition + 97; 
+
+**整个一套下来就是 return (char)((oldChar -'a'+ shift)%26 + 'a');**
+
+848. Shifting Letters
+
+```
+class Solution {
+    public String shiftingLetters(String S, int[] shifts) {
+        
+        if (S.length() == 1) {
+            return S;
+        }
+        
+        int shift = 0;
+        
+        StringBuilder string = new StringBuilder (S);
+        
+        for (int j = shifts.length -1 ; j >= 0; j--) {
+            shift = (shift + shifts[j]) % 26; //这里面别忘了 % 26
+            
+            int newChar = string.charAt(j) - 'a'; //'a' == 97 newChar给出的是 原来的字母在字母表里的位置，以index=0开始
+            newChar = (newChar + shift) % 26 + 97; //重要！！一开始这里fail了，是因为这里面忘了 % 26
+            
+            string.setCharAt(j, (char)newChar); //这个方法很有意思
+        }
+        
+        return string.toString();
+    }
+}
+```
+
+
+
+
+
+
 #### StringBuilder
 - StringBuilder的reverse()方法结合逆序遍历是处理字符串问题的利器：
+
 
 
 
