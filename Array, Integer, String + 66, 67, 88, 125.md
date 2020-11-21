@@ -214,7 +214,55 @@ class Solution {
 - StringBuilder的reverse()方法结合逆序遍历是处理字符串问题的利器：
 
 
+#### String Shift题型
 
+怎么样parse string的两个部分？ 
+- StringBuilder append()；
+- 更省空间的方法 用string "+"： string s = s.substring () + s.substring ()；
+
+例题1427. Perform String Shifts
+```
+class Solution {
+    public String stringShift(String s, int[][] shift) {
+        
+     //   StringBuilder result = new StringBuilder ();  
+        
+        int len = shift.length;
+        int end = s.length();
+        int move = 0;
+        
+        for (int i = 0; i < len; i++) {
+            
+            if ( shift[i][0] == 0 ) {
+                move -=shift[i][1];
+            } else {
+                move +=shift[i][1];
+            }
+        }
+        
+        move = move % len; //注意这个地方，move可能会变得特别大
+        
+        if (move == 0) {
+            return s;
+        }
+        
+        if (move < 0) {
+            // result.append(s.substring(-move,end));  //注意move要取绝对值，要不然会越界
+            // result.append(s.substring(0,-move));
+            
+            s = s.substring(-move,end) + s.substring(0,-move);
+        } 
+        
+        if (move > 0) {
+            // result.append(s.substring(end-move,end)); //注意这里的逻辑是end-move
+            // result.append(s.substring(0,end-move));
+            
+            s = s.substring(end-move,end) + s.substring(0,end-move);
+        }
+        return s;
+    }
+}
+```
 
 
 
