@@ -62,6 +62,46 @@ class Solution {
    }
 }
 ```
+## Array, String, char之间的转化： 
+
+把String变成一个char array用 char [] array = str.toCharArray(); 
+这个sort array的方法是void： Arrays.sort(keyArray);
+把char array变成一个string： String key = String.valueOf(keyArray);
+
+例题：49. Group Anagrams
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+```
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        
+       HashMap <String, ArrayList<String>> map = new HashMap <String, ArrayList<String>>();
+        
+       for (String str: strs) {
+           //create a sorted key 
+           //下面这些不熟练
+           char [] keyArray = str.toCharArray();
+          
+           // bug: String key = String.valueOf(Arrays.sort(keyArray));
+           Arrays.sort(keyArray); //注意这个sort是个void，不能用来return
+           String key = String.valueOf(keyArray);
+           
+           //bug: map.put(key, getOrDefault(key, new ArrayList<String>()).add(str));
+           if (!map.containsKey(key)) {
+               map.put(key, new ArrayList<String> ());
+           }
+           
+           map.get(key).add(str);
+       }
+        //bug: 这个地方要好好写
+        return new ArrayList(map.values());
+    }
+}
+
+```
+
+
 
 
 ## char字符处理 
