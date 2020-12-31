@@ -1,0 +1,35 @@
+## PriorityQueue专题 ##
+
+PriorityQueue 是基于优先堆的一个无界队列，这个优先队列中的元素可以默认natural order或者通过提供的Comparator 在队列实例化的时排序。
+PriorityQueue 不允许空值，而且不支持 non-comparable（不可比较）的对象，比如用户自定义的类。优先队列要求使用 Java Comparable 和 Comparator 接口给对象排序，并且在排序时会按照优先级处理其中的元素。
+PriorityQueue 的大小是不受限制的，但在创建时可以指定初始大小。当我们向优先队列增加元素的时候，队列大小会自动增加。
+注意：
+The Iterator provided in method iterator() is not guaranteed to traverse the elements of the priority queue in any particular order.
+This implementation is not synchronized. 
+
+### 几种常用的constructor:###
+public PriorityQueue()
+public PriorityQueue(int initialCapacity)
+
+public PriorityQueue(int initialCapacity, Comparator<? super E> comparator)
+
+###几个methods: ###
+
+1.	boolean	add(E e)
+Inserts the specified element into this priority queue.
+2.	void	clear()
+Removes all of the elements from this priority queue.
+3.	boolean	contains(Object o)
+Returns true if this queue contains the specified element.
+4.	boolean	offer(E e)
+Inserts the specified element into this priority queue.
+5.	E	peek()
+Retrieves, but does not remove, the head of this queue, or returns null if this queue is empty.
+6.	E	poll()
+Retrieves and removes the head of this queue, or returns null if this queue is empty.
+7.	boolean	remove(Object o)
+Removes a single instance of the specified element from this queue, if it is present.
+8.	int	size()
+Returns the number of elements in this collection.
+9.	Object[]	toArray()
+Returns an array containing all of the elements in this queue.
