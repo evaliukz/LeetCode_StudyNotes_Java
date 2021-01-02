@@ -273,7 +273,7 @@ class Solution {
         
         //Collections.sort(intervals, comp);
         //按照start time排列
-        Arrays.sort(intervals, compStart); //其实不需要compStart
+        Arrays.sort(intervals, compStart);
         //按照end time排列
         PriorityQueue <int []> heap = new PriorityQueue <int []> (compEnd); //每次pop出来是最早结束的
         
@@ -301,4 +301,42 @@ class Solution {
 }
 ```
 
-根据上面的code, 发现PQ
+根据上面的code, 发现PQ只是一个tool用来track end time, 那么在PQ里面，只需要放入end time就好，因为PQ里面的meetings的start time根本没有被用到哇！
+
+```
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        
+        if (intervals.length == 0) return 0;
+        
+        Comparator <int []> compStart = (a, b) -> a[0] == b[0]? a[1]-b[1] : a[0]-b[0]; 
+        Comparator <Integer> compEnd = (a, b) -> a-b; //其实不需要这个
+        
+        //Collections.sort(intervals, comp);
+        //按照start time排列
+        Arrays.sort(intervals, compStart); 
+        //按照end time排列
+        PriorityQueue <Integer> heap = new PriorityQueue <Integer> (compEnd); //每次pop出来是最小的end time
+        
+        heap.add(intervals[0][1]);
+        
+        //按照开始start time的顺序interate
+        for (int i = 1; i < intervals.length; i++) {
+            //最小的start time
+            int firstStart = intervals[i][0];
+            
+            //最小的end time
+            int firstEnd = heap.peek();
+            
+            // if the room is free, assign it to the meeting firstStart, remove the end meeting
+            if (firstStart >= firstEnd) {
+                heap.poll();
+            }
+            // update the end time in the heap  || if the room is not free, add the new room
+            heap.add(intervals[i][1]);
+            }
+
+        return heap.size();
+    }
+}
+```
