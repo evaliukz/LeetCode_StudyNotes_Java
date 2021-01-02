@@ -47,6 +47,63 @@ Returns the number of elements in this collection.
 9.	Object[]	toArray()
 Returns an array containing all of the elements in this queue.
 
+#### 215. Kth Largest Element in an Array 注意一下comparator，如果是留下大元素，把小的元素poll出去要 (a, b) -> a-b 但是这个是heap的default的所以不需要写comparator
+```
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        
+        // capacity = k  | smallest , k-1 elements |  45123   12
+        
+        PriorityQueue <Integer> heap = new PriorityQueue<Integer>();
+        
+        for (int i = 0; i< nums.length; i++) {
+         
+            heap.add(nums[i]);
+            
+            //if (i >= k) { 错误，不能这么写
+            if (heap.size() > k){
+                heap.poll();
+            }
+        }
+        // return heap.peek() 也一样
+        return heap.poll();
+    }
+}
+```
+
+
+#### 378. Kth Smallest Element in a Sorted Matrix 注意一下comparator，如果是留下小元素，把大的元素poll出去要 (a, b) -> b-a;
+
+```
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        
+        //把大的元素pop出去，留下小的元素
+        Comparator <Integer> comp = (a, b) -> b-a;
+        
+        PriorityQueue <Integer> heap = new PriorityQueue<> (comp);
+        
+        for (int i = 0; i < matrix.length; i++){
+            
+            for (int j = 0; j < matrix[0].length; j++){
+                
+                heap.add(matrix[i][j]);
+                
+                if (heap.size() >k){
+                    heap.poll();
+                }
+                
+            }
+
+        }
+        
+        return heap.poll();
+        
+    }
+}
+```
+
+
 
 #### 692. Top K Frequent Words  学习双重comparator写法
 
