@@ -248,5 +248,57 @@ class Solution {
 
 在真实生活里面，一个小组去找room开会，那么他们的做法就是一个一个room去查找，看看现在哪个是空的，就进去开会。
 
-我们可以把
+（1）我们可以把各个小组meeting的start time从小到达排列放在int[][]里面，如果start time相同，我们按照end time来从小到大排列
 
+ Comparator <int []> compStart = (a, b) -> a[0] == b[0]? a[1]-b[1] : a[0]-b[0]; 
+
+（2）同时做一个PQ，里面的comparator将meeting的end time从小到大排列，我们要的是每次给出来meeting end time最早的那个meeting
+
+ Comparator <int []> compEnd = (a, b) -> a[1]-b[1];
+
+（3）证明：对于任意一个meeting在按照start time排列好的int[][]里面，如果PQ里面最早的end time > 这个meeting的start time，那么就一定要一个新的room, heap.add(这个meeting)
+
+（4）证明：如过PQ里面最早的end time <= start time, 那么可以把这个meeting给这个最早的end time，此时heap把这个旧的最早end time poll()掉，然后加入heap.add(这个meeting)
+
+（5）这个PQ的size就是需要的meet room数量
+
+```
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        
+        if (intervals.length == 0) return 0;
+        
+        Comparator <int []> compStart = (a, b) -> a[0] == b[0]? a[1]-b[1] : a[0]-b[0]; 
+        Comparator <int []> compEnd = (a, b) -> a[1] - b[1];
+        
+        //Collections.sort(intervals, comp);
+        //按照start time排列
+        Arrays.sort(intervals, compStart); //其实不需要compStart
+        //按照end time排列
+        PriorityQueue <int []> heap = new PriorityQueue <int []> (compEnd); //每次pop出来是最早结束的
+        
+        heap.add(intervals[0]);
+        
+        //按照开始start time的顺序interate
+        for (int i = 1; i < intervals.length; i++) {
+            //最小的start time
+            int firstStart = intervals[i][0];
+            
+            //最小的end time
+            int[] top = heap.peek();
+            int firstEnd = top[1];
+            
+            // if the room is free, assign it to the meeting firstStart, remove the end meeting
+            if (firstStart >= firstEnd) {
+                heap.poll();
+            }
+            // update the end time in the heap  || if the room is not free, add the new room
+            heap.add(intervals[i]);
+            }
+
+        return heap.size();
+    }
+}
+```
+
+根据上面的code, 发现PQ
