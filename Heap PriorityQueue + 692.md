@@ -1,21 +1,24 @@
 # PriorityQueue专题
 
 PriorityQueue 是基于优先堆的一个无界队列，这个优先队列中的元素可以默认natural order或者通过提供的Comparator 在队列实例化的时排序。
+
 PriorityQueue 不允许空值，而且不支持 non-comparable（不可比较）的对象，比如用户自定义的类。优先队列要求使用 Java Comparable 和 Comparator 接口给对象排序，并且在排序时会按照优先级处理其中的元素。
+
 PriorityQueue 的大小是不受限制的，但在创建时可以指定初始大小。当我们向优先队列增加元素的时候，队列大小会自动增加。
-注意：
+
+#### 注意：
 The Iterator provided in method iterator() is not guaranteed to traverse the elements of the priority queue in any particular order.
 This implementation is not synchronized. 
 
-### 几种常用的constructor:
+#### 几种常用的constructor:
 
 public PriorityQueue()
 
-public PriorityQueue(int initialCapacity)
+public PriorityQueue(int initialCapacity) 但是这个capacity在刷题时候并没什么用
 
 public PriorityQueue(int initialCapacity, Comparator<? super E> comparator)
 
-###几个methods: 
+#### 几个methods: 
 
 1.	boolean	add(E e)
 Inserts the specified element into this priority queue.
@@ -45,7 +48,7 @@ Returns the number of elements in this collection.
 Returns an array containing all of the elements in this queue.
 
 
-### 692. Top K Frequent Words  学习双重comparator写法
+#### 692. Top K Frequent Words  学习双重comparator写法
 
 ```
 class Solution {
@@ -82,6 +85,38 @@ class Solution {
         
         return result;
     }
+}
+```
+
+#### 973. K Closest Points to Origin 学习int[][]的Comparator的写法
+```
+class Solution {
+    public int[][] kClosest(int[][] points, int K) {
+        
+        int len = points.length;
+        //要保留更小的就是b-a 
+        //一开始写了b[0]^2 + b[1]^2 - a[0]^2 - a[1]^2 但是不能用，所以以后要写成两个相乘
+        Comparator<int[]> comp = (a, b) -> (b[0]*b[0] + b[1]*b[1] - a[0]*a[0] - a[1]*a[1]);
+        
+        PriorityQueue <int[]> heap = new PriorityQueue<int[]> (comp);
+        
+        for (int i = 0; i < len; i++) {
+
+            heap.add(points[i]);
+            
+            if (heap.size()>K){
+                int[] temp = heap.poll();
+            }
+        }
+    
+        int[][] result = new int[K][2];
+    
+        for (int i=0; i<K; i++){
+            result[i] = heap.poll();
+        }
+    
+    return result;
+}
 }
 ```
 
