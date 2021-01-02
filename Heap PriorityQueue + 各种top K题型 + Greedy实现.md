@@ -120,4 +120,71 @@ class Solution {
 }
 ```
 
+767. Reorganize String 非常好的一道题，利用PQ来做Greedy，一直拿最大的，第二大的，第三大的交替...
+
+```
+class Solution {
+    public String reorganizeString(String S) {
+        
+        char[] string = S.toCharArray();
+        
+// 第一步：先算数，一边扫一遍检查有没有可能是false
+        HashMap <Character, Integer> map = new HashMap<Character, Integer>();
+        
+        for (char c: string){
+            map.put(c, map.getOrDefault(c, 0) +1);
+            //实验了一下：如果是偶数 就是 > string.length/2 
+            //          偶数时候： string.length/2 = (string.length+1)/2
+            //          如果是奇数 就是 string.length/2+1
+            //          奇数时候： string.length/2+1 =  (string.length+1)/2
+            
+             if (map.get(c) > (string.length+1)/2){
+                 return "";
+             }
+        }
+        
+// 第二步：最大堆 , 想要留下小的，poll出来大的
+        Comparator <Character> comp = (a, b) -> map.get(b) - map.get(a);
+        PriorityQueue <Character> heap = new PriorityQueue <Character>(comp);
+        
+        for (char c: map.keySet()){
+            heap.add(c);
+        }
+        
+//第三步：交替加上最大的，第二大的，在map里count--，然后再放回heap
+        
+        StringBuilder result = new StringBuilder();
+        
+        while (heap.size() > 1) {
+            char max = heap.poll();
+            result.append(max);
+            
+            char second = heap.poll();
+            result.append(second);
+            
+            //必须要放在max和second的后面，去heap.add(), 否则max处理完之后，做heap.add()
+            //second再poll的时候会再次拿到max
+            if (map.get(max) -1 > 0){
+                map.put(max, map.get(max)-1);
+                heap.add(max);
+            }
+            
+            if (map.get(second) - 1 > 0) {
+                map.put(second, map.get(second)-1);
+                heap.add(second);
+             }
+        }
+//处理最后一个item如果有的话   
+        // 一开始省略了 if heap.size == 1, 但后来发现不可以，如果只有2个元素a,b,那么到这里就没有了，
+        // 继续执行会有null 错误
+        if (heap. size () == 1) {
+            char max = heap.poll();
+            result.append(max);
+        }
+        return result.toString();
+    }
+}
+
+```
+
 
