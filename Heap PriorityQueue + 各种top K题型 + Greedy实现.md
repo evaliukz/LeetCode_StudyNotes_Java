@@ -177,7 +177,7 @@ class Solution {
 }
 ```
 
-767. Reorganize String 非常好的一道题，利用PQ来做Greedy，一直拿最大的，第二大的，第三大的交替...
+#### 767. Reorganize String 非常好的一道题，利用PQ来做Greedy，一直拿最大的，第二大的，第三大的交替...
 
 ```
 class Solution {
