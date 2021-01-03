@@ -103,6 +103,42 @@ class Solution {
 }
 ```
 
+#### 在一棵普通的二叉树上求第kth小的元素
+
+```
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        
+       Comparator<Integer> comp = (a, b) -> b-a;//最大heap
+        
+       PriorityQueue <Integer> heap = new PriorityQueue <Integer> (comp); 
+        
+       dfs (root, k, heap);
+        
+       return heap.poll();
+        
+    }
+    
+    private void dfs (TreeNode root, int k, PriorityQueue <Integer> heap) {
+        
+        if (root == null) {
+            return;
+        }
+        
+        heap.add(root.val);
+        
+        if (heap.size() > k){
+            heap.poll();
+        }
+        
+        dfs(root.left, k, heap);
+        dfs(root.right, k, heap);
+        
+    }
+        
+}
+```
+
 
 
 #### 692. Top K Frequent Words  学习双重comparator写法
