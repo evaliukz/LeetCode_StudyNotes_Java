@@ -1,8 +1,9 @@
 ## BFS🐚 的很多种用法
 
-BFS可以实现把各个node放进坐标系里，从root(0,0)开始，每次往下都row+1, 每次往左下都col-1, 每次往右下都col+1; 这道题和row无关，只是往下走来计算column。
+
 
 #### 314. Binary Tree Vertical Order Traversal
+BFS可以实现把各个node放进坐标系里，从root(0,0)开始，每次往下都row+1, 每次往左下都col-1, 每次往右下都col+1; 这道题和row无关，只是往下走来计算column。
 
 ```
 class Solution {
@@ -55,7 +56,7 @@ class Solution {
     }
 }
 ```
-863. All Nodes Distance K in Binary Tree
+#### 863. All Nodes Distance K in Binary Tree
 
 如果节点有指向父节点的引用，也就知道了距离该节点 1 距离的所有节点。之后就可以从 target 节点开始进行宽度优先搜索了。
 
